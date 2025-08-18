@@ -13,6 +13,7 @@ router.get("/", async (req, res, next) => {
     }
 });
 
+/** GET /:code - get a specific company by code */
 router.get("/:code", async (req, res, next) => {
     try {
         const code = req.params.code;
