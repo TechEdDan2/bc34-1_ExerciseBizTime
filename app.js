@@ -12,11 +12,11 @@ app.use(express.json());
 // -------------- //
 
 const companiesRoutes = require("./routes/companies");
-const invoicesRoutes = require("./routes/invoices");
+// const invoicesRoutes = require("./routes/invoices");
 
 // Use the companies and invoices routes
 app.use("/companies", companiesRoutes);
-app.use("/invoices", invoicesRoutes);
+// app.use("/invoices", invoicesRoutes);
 
 
 /** 404 handler */

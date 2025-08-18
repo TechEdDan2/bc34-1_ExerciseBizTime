@@ -6,9 +6,9 @@ let DB_URI;
 
 // Check if the environment is production or development
 if (process.env.NODE_ENV === 'test') {
-    DB_URI = 'postgresql:///biztime_test';
+    DB_URI = 'postgresql:///biztimedb_test';
 } else {
-    DB_URI = 'postgresql:///biztime';
+    DB_URI = 'postgresql:///biztimedb';
 }
 
 // Create a new client instance with the database URI
