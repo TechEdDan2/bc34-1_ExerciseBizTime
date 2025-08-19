@@ -20,13 +20,29 @@ router.get("/", async (req, res, next) => {
 router.get("/:code", async (req, res, next) => {
     try {
         const code = req.params.code;
-        const result = await db.query("SELECT * FROM companies WHERE code = $1", [code]);
+        // const result = await db.query("SELECT * FROM companies WHERE code = $1", [code]);
+
+        const result = await db.query(`
+            SELECT c.code, c.name, c.description,
+            ARRAY_AGG(i.industry) AS industries
+            FROM companies c
+            LEFT JOIN comps_inds ci 
+            ON c.code = ci.comp_code
+            LEFT JOIN industries i 
+            ON ci.industry_code = i.code
+            WHERE c.code = $1
+            GROUP BY c.code, c.name, c.description`, [code]);
 
         if (result.rows.length === 0) {
             throw new ExpressError(`No company found with code: ${code}`, 404);
         }
 
-        return res.json({ company: result.rows[0] });
+        const { name, description, industries } = result.rows[0];
+        return res.json({ company: { code, name, description, industries } });
+
+        // const { name, description } = result.rows[0];
+        // const industries = result.rows.map(row => row.industry).filter(ind => ind !== null);
+        // return res.send({ company: { code, name, description, industries } });
     } catch (err) {
         return next(err);
     }
