@@ -67,7 +67,7 @@ router.patch("/:id", async (req, res, next) => {
         const { amt, paid } = req.body;
 
         if (paid !== undefined && typeof paid !== 'boolean') {
-            throw new ExpressError("Paid must be a boolean value", 400);
+            throw new ExpressError("Paid must be a boolean value", 404);
         }
 
         const result = await db.query(
@@ -81,7 +81,7 @@ router.patch("/:id", async (req, res, next) => {
 
         return res.json({ invoice: result.rows[0] });
     } catch (err) {
-        return next(new ExpressError("Invalid data", 400));
+        return next(new ExpressError("Invalid data", 404));
     }
 });
 
