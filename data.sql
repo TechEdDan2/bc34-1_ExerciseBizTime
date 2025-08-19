@@ -6,7 +6,9 @@ CREATE DATABASE biztimedb;
 
 DROP TABLE IF EXISTS invoices CASCADE;
 DROP TABLE IF EXISTS companies CASCADE;
-
+DROP TABLE IF EXISTS industries CASCADE;
+-- The table below is a join table for many-to-many relationships
+DROP TABLE IF EXISTS comps_inds CASCADE;
 
 CREATE TABLE companies (
     code text PRIMARY KEY,
@@ -24,6 +26,17 @@ CREATE TABLE invoices (
     CONSTRAINT invoices_amt_check CHECK ((amt > (0)::double precision))
 );
 
+CREATE TABLE industries (
+    code text PRIMARY KEY,
+    industry text NOT NULL UNIQUE
+);
+
+CREATE TABLE comps_inds (
+    comp_code text NOT NULL REFERENCES companies ON DELETE CASCADE,
+    industry_code text NOT NULL REFERENCES industries ON DELETE CASCADE,
+    PRIMARY KEY (comp_code, industry_code)
+);
+
 INSERT INTO companies
   VALUES ('apple', 'Apple Computer', 'Maker of OSX.'),
          ('ibm', 'IBM', 'Big blue.');
@@ -33,3 +46,14 @@ INSERT INTO invoices (comp_Code, amt, paid, paid_date)
          ('apple', 200, false, null),
          ('apple', 300, true, '2018-01-01'),
          ('ibm', 400, false, null);
+
+INSERT INTO industries
+  VALUES ('hardware', 'Hardware'),
+         ('software', 'Software'),
+         ('services', 'Services');
+
+INSERT INTO comps_inds (comp_code, industry_code)
+  VALUES ('apple', 'hardware'),
+         ('apple', 'software'),
+         ('ibm', 'hardware'),
+         ('ibm', 'services');

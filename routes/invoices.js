@@ -85,6 +85,8 @@ router.patch("/:id", async (req, res, next) => {
     }
 });
 
+// PUT method to update an invoice
+// Using PUT to update all fields of an invoice
 router.put("/:id", async (req, res, next) => {
     try {
         const invoice_id = req.params.id;
