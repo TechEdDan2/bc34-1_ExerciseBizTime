@@ -3,6 +3,9 @@ const router = new express.Router();
 const db = require("../db");
 const ExpressError = require("../expressError");
 
+// Use slugify to create company codes
+const slugify = require("slugify");
+
 /** GET / - get list of companies */
 router.get("/", async (req, res, next) => {
     try {
@@ -29,13 +32,14 @@ router.get("/:code", async (req, res, next) => {
     }
 });
 
-/** POST / - create a new company */
+/** POST / - create a new company use slugify to create the code */
 router.post("/", async (req, res, next) => {
     try {
-        const { code, name, description } = req.body;
-        if (!code || !name) {
-            throw new ExpressError("Code and name are required", 400);
+        const { name, description } = req.body;
+        if (!name) {
+            throw new ExpressError("Name is required", 400);
         }
+        const code = slugify(name, { lower: true, strict: true, trim: true }).slice(0, 6);
         const result = await db.query(
             "INSERT INTO companies (code, name, description) VALUES ($1, $2, $3) RETURNING code, name, description",
             [code, name, description]

@@ -4,8 +4,9 @@ CREATE DATABASE biztimedb;
 
 \c biztimedb
 
-DROP TABLE IF EXISTS invoices;
-DROP TABLE IF EXISTS companies;
+DROP TABLE IF EXISTS invoices CASCADE;
+DROP TABLE IF EXISTS companies CASCADE;
+
 
 CREATE TABLE companies (
     code text PRIMARY KEY,
